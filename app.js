@@ -20,6 +20,7 @@ my: {
   checker_ph: "ဥပမာ 341", checker_ph5: "ဥပမာ 06740", checker_btn: "စစ်မယ်",
   checker_miss: "မှတ်တမ်း 100 မဲထဲမှာ မတွေ့ပါ",
   checker_need: n => `ဂဏန်း ${n} လုံး အပြည့်ရိုက်ထည့်ပါ`,
+  new_result: "🎉 ရလဒ်အသစ်ရပြီ!",
   checker_hit: n => `${n} ခါတွေ့တယ်:`,
   history: "🗂️ မှတ်တမ်း", th_issue: "အမှတ်", th_date: "ရက်", th_result: "ရလဒ်",
   share_title: "📣 မျှဝေမယ်", copy_link: "🔗 လင့်ခ်ကူးမယ်",
@@ -58,6 +59,7 @@ en: {
   checker_ph: "e.g. 341", checker_ph5: "e.g. 06740", checker_btn: "Check",
   checker_miss: "Not found in the last 100 draws",
   checker_need: n => `Please enter all ${n} digits`,
+  new_result: "🎉 New results are in!",
   checker_hit: n => `Found ${n} time(s):`,
   history: "🗂️ History", th_issue: "Issue", th_date: "Date", th_result: "Result",
   share_title: "📣 Share", copy_link: "🔗 Copy link",
@@ -96,6 +98,7 @@ zh: {
   checker_ph: "例如 341", checker_ph5: "例如 06740", checker_btn: "查询",
   checker_miss: "近100期历史中未找到",
   checker_need: n => `请输入完整的 ${n} 位数字`,
+  new_result: "🎉 新开奖结果来了！",
   checker_hit: n => `共出现 ${n} 次：`,
   history: "🗂️ 历史开奖", th_issue: "期号", th_date: "日期", th_result: "开奖号码",
   share_title: "📣 分享", copy_link: "🔗 复制链接",
@@ -305,6 +308,22 @@ function setLang(l){
 document.querySelectorAll("#langs button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 $("tab-3d").onclick = ()=>{ $("tab-3d").classList.add("active"); $("tab-pl5").classList.remove("active"); $("pane-3d").classList.add("active"); $("pane-pl5").classList.remove("active"); };
 $("tab-pl5").onclick = ()=>{ $("tab-pl5").classList.add("active"); $("tab-3d").classList.remove("active"); $("pane-pl5").classList.add("active"); $("pane-3d").classList.remove("active"); };
+
+/* live refresh: re-fetch data every 60s, update page the moment new results land */
+async function liveRefresh(){
+  try{
+    const q = "v=" + Date.now();
+    const [a,b] = await Promise.all([
+      fetch("data/3d.json?"+q).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch("data/pl5.json?"+q).then(r=>r.ok?r.json():null).catch(()=>null),
+    ]);
+    let changed = false;
+    if(a && a.latest && D3 && D3.latest && a.latest.issue !== D3.latest.issue){ D3 = a; changed = true; }
+    if(b && b.latest && D5 && D5.latest && b.latest.issue !== D5.latest.issue){ D5 = b; changed = true; }
+    if(changed){ setLang(LANG); toast(t("new_result")); }
+  }catch(e){}
+}
+setInterval(liveRefresh, 60000);
 
 Promise.all([
   fetch("data/3d.json").then(r=>r.json()).catch(()=>null),
