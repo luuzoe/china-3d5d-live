@@ -14,6 +14,7 @@ my: {
   copy: "📋 ကူးယူမယ်", copied: "ကူးယူပြီးပြီ ✓",
   pl3_title: "🎲 排列3 (排列5 ရဲ့ ပထမ 3 လုံး)",
   checker_title: "🔍 ဂဏန်းစစ်မယ်",
+  calendar: "📅 မဲပြက္ခဒိန်",
   checker_ph: "ဥပမာ 341", checker_ph5: "ဥပမာ 06740", checker_btn: "စစ်မယ်",
   checker_miss: "မှတ်တမ်း 100 မဲထဲမှာ မတွေ့ပါ",
   checker_hit: n => `${n} ခါတွေ့တယ်:`,
@@ -45,6 +46,7 @@ en: {
   copy: "📋 Copy", copied: "Copied ✓",
   pl3_title: "🎲 排列3 (first 3 digits of 排列5)",
   checker_title: "🔍 Check your numbers",
+  calendar: "📅 Draw calendar",
   checker_ph: "e.g. 341", checker_ph5: "e.g. 06740", checker_btn: "Check",
   checker_miss: "Not found in the last 100 draws",
   checker_hit: n => `Found ${n} time(s):`,
@@ -76,6 +78,7 @@ zh: {
   copy: "📋 复制", copied: "已复制 ✓",
   pl3_title: "🎲 排列3（排列5前三位）",
   checker_title: "🔍 号码查询",
+  calendar: "📅 开奖日历",
   checker_ph: "例如 341", checker_ph5: "例如 06740", checker_btn: "查询",
   checker_miss: "近100期历史中未找到",
   checker_hit: n => `共出现 ${n} 次：`,
@@ -135,6 +138,57 @@ function renderLatest(){
   const upd = [D3&&D3.updated, D5&&D5.updated].filter(Boolean).sort().pop();
   if(upd) $("upd").textContent = new Date(upd).toLocaleString(LANG==="zh"?"zh-CN":LANG==="en"?"en-US":"my-MM");
 }
+
+/* draw calendar */
+let calOff = {d3:0, pl5:0};
+function renderCalendar(data, gridId, labelId, off){
+  const g = $(gridId), lb = $(labelId);
+  if(!g || !data || !data.history.length) return;
+  const now = beijingNow();
+  let y = now.getFullYear(), m = now.getMonth() - off;
+  while(m < 0){ m += 12; y--; }
+  const map = {}; data.history.forEach(h=>map[h.date]=h);
+  const oldest = data.history[0].date.slice(0,7);
+  const cur = `${y}-${String(m+1).padStart(2,"0")}`;
+  const loc = LANG==="zh"?"zh-CN":LANG==="en"?"en-US":"my-MM";
+  lb.textContent = new Date(y, m, 1).toLocaleDateString(loc, {year:"numeric", month:"long"});
+  const wd = [];
+  for(let i=0;i<7;i++) wd.push(new Date(2024,0,7+i).toLocaleDateString(loc,{weekday:"narrow"}));
+  let html = `<div class="cal-head">`+wd.map(w=>`<span>${w}</span>`).join("")+`</div><div class="cal-grid">`;
+  const startDay = new Date(y, m, 1).getDay();
+  const daysIn = new Date(y, m+1, 0).getDate();
+  for(let i=0;i<startDay;i++) html += `<span class="cal-empty"></span>`;
+  for(let d=1; d<=daysIn; d++){
+    const ds = `${cur}-${String(d).padStart(2,"0")}`;
+    const h = map[ds];
+    html += h
+      ? `<span class="cal-day has"><b>${d}</b><i>${h.digits.join("")}</i></span>`
+      : `<span class="cal-day"><b>${d}</b></span>`;
+  }
+  html += `</div>`;
+  g.innerHTML = html;
+  return {canPrev: cur > oldest, canNext: off > 0};
+}
+function wireCalendars(){
+  const upd = ()=>{
+    const r1 = renderCalendar(D3,"cal3d","cal3d-label",calOff.d3);
+    const r2 = renderCalendar(D5,"calpl5","calpl5-label",calOff.pl5);
+    if(r1){ $("cal3d-prev").disabled=!r1.canPrev; $("cal3d-next").disabled=!r1.canNext; }
+    if(r2){ $("calpl5-prev").disabled=!r2.canPrev; $("calpl5-next").disabled=!r2.canNext; }
+  };
+  $("cal3d-prev").onclick=()=>{calOff.d3++;upd();}; $("cal3d-next").onclick=()=>{calOff.d3--;upd();};
+  $("calpl5-prev").onclick=()=>{calOff.pl5++;upd();}; $("calpl5-next").onclick=()=>{calOff.pl5--;upd();};
+  upd();
+  window._calUpd = upd;
+}
+
+/* hide ad slots that never fill (AdSense not approved yet) */
+setTimeout(()=>{
+  document.querySelectorAll(".adslot").forEach(s=>{
+    const ins = s.querySelector("ins");
+    if(ins && !ins.querySelector("iframe")) s.style.display = "none";
+  });
+}, 5000);
 
 function checkNumbers(inputId, resId, data, len){
   const el = $(resId);
@@ -216,6 +270,7 @@ function setLang(l){
   });
   document.title = t("doc_title");
   renderLatest(); renderHist(); renderFaq(); shareLinks();
+  if(window._calUpd) window._calUpd();
   if($("ck3d") && $("ck3d").value.replace(/\D/g,"").length===3) checkNumbers("ck3d","ck3d-res",D3,3);
   if($("ckpl5") && $("ckpl5").value.replace(/\D/g,"").length===5) checkNumbers("ckpl5","ckpl5-res",D5,5);
 }
@@ -227,5 +282,5 @@ $("tab-pl5").onclick = ()=>{ $("tab-pl5").classList.add("active"); $("tab-3d").c
 Promise.all([
   fetch("data/3d.json").then(r=>r.json()).catch(()=>null),
   fetch("data/pl5.json").then(r=>r.json()).catch(()=>null),
-]).then(([a,b])=>{ D3=a; D5=b; setLang(LANG); wireCheckers(); });
+]).then(([a,b])=>{ D3=a; D5=b; setLang(LANG); wireCheckers(); wireCalendars(); });
 setInterval(tick, 1000); tick();
