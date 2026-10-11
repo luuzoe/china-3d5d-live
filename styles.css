@@ -50,15 +50,16 @@ main{max-width:720px; margin:0 auto; padding:12px 12px 40px}
 .subcard{background:var(--bg2); border:1px dashed var(--line); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center}
 .subcard .balls{margin:6px 0}
 h2.sec{font-size:1.05rem; margin:22px 0 10px; color:var(--gold2)}
-.freq-pos{margin-bottom:14px}
-.freq-pos h3{font-size:.9rem; color:var(--dim); margin:0 0 6px; font-weight:600}
-.freq-row{display:flex; align-items:center; gap:6px; margin:3px 0; font-size:.78rem}
-.freq-row .dg{width:20px; text-align:center; color:var(--dim); font-variant-numeric:tabular-nums}
-.freq-row .bar{flex:1; height:14px; background:var(--bg2); border-radius:7px; overflow:hidden}
-.freq-row .fill{height:100%; background:linear-gradient(90deg,#e09f1f,var(--gold2)); border-radius:7px}
-.freq-row .ct{width:34px; text-align:right; color:var(--dim); font-variant-numeric:tabular-nums}
-.freq-note{background:#1a1408; border:1px solid #5a4517; color:#e8c96a; border-radius:10px;
-  padding:10px 12px; font-size:.82rem; margin:4px 0 16px}
+.checker-row{display:flex; gap:8px}
+.checker-row input{flex:1; padding:11px 12px; border-radius:10px; border:1px solid var(--line);
+  background:var(--bg2); color:var(--txt); font-size:1.1rem; letter-spacing:4px; text-align:center; font-weight:700}
+.checker-row button{padding:11px 18px; border-radius:10px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,#f5c542,#e09f1f); color:#0d1420; font-weight:700; font-size:.95rem}
+.checker-res{margin-top:10px; font-size:.88rem}
+.checker-res .miss{color:var(--dim)}
+.checker-res .hitline{color:var(--gold2); font-weight:700; margin-bottom:6px}
+.checker-res .hit{padding:6px 0; border-top:1px solid var(--line)}
+.checker-res .hit .res{color:var(--gold2); font-weight:700; letter-spacing:2px}
 .hist-wrap{max-height:420px; overflow-y:auto; border:1px solid var(--line); border-radius:12px}
 table.hist{width:100%; border-collapse:collapse; font-size:.85rem}
 table.hist th{position:sticky; top:0; background:var(--bg2); color:var(--gold2); padding:8px; font-weight:600; z-index:2}

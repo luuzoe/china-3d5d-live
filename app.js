@@ -13,8 +13,10 @@ my: {
   next_in: "⏳ နောက်မဲအတွက်", waiting: "ရလဒ်ထွက်ဖို့ စောင့်ဆိုင်းနေသည်…",
   copy: "📋 ကူးယူမယ်", copied: "ကူးယူပြီးပြီ ✓",
   pl3_title: "🎲 排列3 (排列5 ရဲ့ ပထမ 3 လုံး)",
-  frequency: "📊 ဂဏန်းအကြိမ်ရေ (နောက်ဆုံး 100 မဲ)",
-  freq_note: "⚠️ သမိုင်းအကြိမ်ရေက နောက်မဲကို ခန့်မှန်းလို့မရပါ — မဲတစ်ခါချင်းစီ သီးခြားဖြစ်ပြီး ဂဏန်းတိုင်းရဲ့ အခွင့်အရေးက အတူတူပါ။",
+  checker_title: "🔍 ဂဏန်းစစ်မယ်",
+  checker_ph: "ဥပမာ 341", checker_ph5: "ဥပမာ 06740", checker_btn: "စစ်မယ်",
+  checker_miss: "မှတ်တမ်း 100 မဲထဲမှာ မတွေ့ပါ",
+  checker_hit: n => `${n} ခါတွေ့တယ်:`,
   history: "🗂️ မှတ်တမ်း", th_issue: "အမှတ်", th_date: "ရက်", th_result: "ရလဒ်",
   share_title: "📣 မျှဝေမယ်", copy_link: "🔗 လင့်ခ်ကူးမယ်",
   updated: "အပ်ဒိတ်", source: "ရင်းမြစ်",
@@ -42,8 +44,10 @@ en: {
   next_in: "⏳ Next draw in", waiting: "Waiting for results…",
   copy: "📋 Copy", copied: "Copied ✓",
   pl3_title: "🎲 排列3 (first 3 digits of 排列5)",
-  frequency: "📊 Digit frequency (last 100 draws)",
-  freq_note: "⚠️ Past frequency cannot predict future draws — each draw is independent and every number has equal odds.",
+  checker_title: "🔍 Check your numbers",
+  checker_ph: "e.g. 341", checker_ph5: "e.g. 06740", checker_btn: "Check",
+  checker_miss: "Not found in the last 100 draws",
+  checker_hit: n => `Found ${n} time(s):`,
   history: "🗂️ History", th_issue: "Issue", th_date: "Date", th_result: "Result",
   share_title: "📣 Share", copy_link: "🔗 Copy link",
   updated: "Updated", source: "Source",
@@ -71,8 +75,10 @@ zh: {
   next_in: "⏳ 距下期开奖", waiting: "等待开奖…",
   copy: "📋 复制", copied: "已复制 ✓",
   pl3_title: "🎲 排列3（排列5前三位）",
-  frequency: "📊 号码频率（近100期）",
-  freq_note: "⚠️ 历史频率不能预测未来开奖——每次开奖独立随机，每个号码概率均等。",
+  checker_title: "🔍 号码查询",
+  checker_ph: "例如 341", checker_ph5: "例如 06740", checker_btn: "查询",
+  checker_miss: "近100期历史中未找到",
+  checker_hit: n => `共出现 ${n} 次：`,
   history: "🗂️ 历史开奖", th_issue: "期号", th_date: "日期", th_result: "开奖号码",
   share_title: "📣 分享", copy_link: "🔗 复制链接",
   updated: "更新", source: "数据来源",
@@ -130,23 +136,23 @@ function renderLatest(){
   if(upd) $("upd").textContent = new Date(upd).toLocaleString(LANG==="zh"?"zh-CN":LANG==="en"?"en-US":"my-MM");
 }
 
-function renderFreq(){
-  const mk = (data, posLabels, el) => {
-    if(!data || !data.history.length) return;
-    const H = data.history.slice(-100);
-    let html = "";
-    posLabels.forEach((pl, pi) => {
-      const cnt = Array(10).fill(0);
-      H.forEach(h => cnt[h.digits[pi]]++);
-      const mx = Math.max(...cnt);
-      html += `<div class="freq-pos"><h3>${pl}</h3>` + cnt.map((c,d)=>
-        `<div class="freq-row"><span class="dg">${d}</span><div class="bar"><div class="fill" style="width:${mx?Math.round(c/mx*100):0}%"></div></div><span class="ct">${c}</span></div>`
-      ).join("") + `</div>`;
-    });
-    $(el).innerHTML = html;
-  };
-  mk(D3, t("pos3d"), "f3d");
-  mk(D5, t("pos5d"), "fpl5");
+function checkNumbers(inputId, resId, data, len){
+  const el = $(resId);
+  const v = ($(inputId).value || "").replace(/\D/g,"");
+  if(v.length !== len){ el.innerHTML = ""; return; }
+  const hits = data && data.history ? data.history.filter(h=>h.digits.join("")===v).reverse() : [];
+  if(!hits.length){ el.innerHTML = `<span class="miss">${t("checker_miss")}</span>`; return; }
+  el.innerHTML = `<div class="hitline">${t("checker_hit")(hits.length)}</div>` +
+    hits.slice(0,12).map(h=>`<div class="hit"><b>${h.issue}</b> · ${h.date} · <span class="res">${h.digits.join(" ")}</span></div>`).join("");
+}
+
+function wireCheckers(){
+  $("ck3d-btn").onclick = ()=>checkNumbers("ck3d","ck3d-res",D3,3);
+  $("ck3d").addEventListener("input", e=>{ e.target.value=e.target.value.replace(/\D/g,"").slice(0,3); });
+  $("ck3d").addEventListener("keydown", e=>{ if(e.key==="Enter") checkNumbers("ck3d","ck3d-res",D3,3); });
+  $("ckpl5-btn").onclick = ()=>checkNumbers("ckpl5","ckpl5-res",D5,5);
+  $("ckpl5").addEventListener("input", e=>{ e.target.value=e.target.value.replace(/\D/g,"").slice(0,5); });
+  $("ckpl5").addEventListener("keydown", e=>{ if(e.key==="Enter") checkNumbers("ckpl5","ckpl5-res",D5,5); });
 }
 
 function renderHist(){
@@ -205,8 +211,13 @@ function setLang(l){
     const map={meta_desc:"content",og_title:"content",og_desc:"content"}; const attr=map[el.dataset.i18nAttr];
     const v=t(el.dataset.i18nAttr); if(attr&&typeof v==="string") el.setAttribute(attr,v);
   });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const v=t(el.dataset.i18nPh); if(typeof v==="string") el.setAttribute("placeholder",v);
+  });
   document.title = t("doc_title");
-  renderLatest(); renderFreq(); renderHist(); renderFaq(); shareLinks();
+  renderLatest(); renderHist(); renderFaq(); shareLinks();
+  if($("ck3d") && $("ck3d").value.replace(/\D/g,"").length===3) checkNumbers("ck3d","ck3d-res",D3,3);
+  if($("ckpl5") && $("ckpl5").value.replace(/\D/g,"").length===5) checkNumbers("ckpl5","ckpl5-res",D5,5);
 }
 
 document.querySelectorAll("#langs button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
@@ -216,5 +227,5 @@ $("tab-pl5").onclick = ()=>{ $("tab-pl5").classList.add("active"); $("tab-3d").c
 Promise.all([
   fetch("data/3d.json").then(r=>r.json()).catch(()=>null),
   fetch("data/pl5.json").then(r=>r.json()).catch(()=>null),
-]).then(([a,b])=>{ D3=a; D5=b; setLang(LANG); });
+]).then(([a,b])=>{ D3=a; D5=b; setLang(LANG); wireCheckers(); });
 setInterval(tick, 1000); tick();
