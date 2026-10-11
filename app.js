@@ -17,6 +17,7 @@ my: {
   calendar: "📅 မဲပြက္ခဒိန်",
   checker_ph: "ဥပမာ 341", checker_ph5: "ဥပမာ 06740", checker_btn: "စစ်မယ်",
   checker_miss: "မှတ်တမ်း 100 မဲထဲမှာ မတွေ့ပါ",
+  checker_need: n => `ဂဏန်း ${n} လုံး အပြည့်ရိုက်ထည့်ပါ`,
   checker_hit: n => `${n} ခါတွေ့တယ်:`,
   history: "🗂️ မှတ်တမ်း", th_issue: "အမှတ်", th_date: "ရက်", th_result: "ရလဒ်",
   share_title: "📣 မျှဝေမယ်", copy_link: "🔗 လင့်ခ်ကူးမယ်",
@@ -49,6 +50,7 @@ en: {
   calendar: "📅 Draw calendar",
   checker_ph: "e.g. 341", checker_ph5: "e.g. 06740", checker_btn: "Check",
   checker_miss: "Not found in the last 100 draws",
+  checker_need: n => `Please enter all ${n} digits`,
   checker_hit: n => `Found ${n} time(s):`,
   history: "🗂️ History", th_issue: "Issue", th_date: "Date", th_result: "Result",
   share_title: "📣 Share", copy_link: "🔗 Copy link",
@@ -81,6 +83,7 @@ zh: {
   calendar: "📅 开奖日历",
   checker_ph: "例如 341", checker_ph5: "例如 06740", checker_btn: "查询",
   checker_miss: "近100期历史中未找到",
+  checker_need: n => `请输入完整的 ${n} 位数字`,
   checker_hit: n => `共出现 ${n} 次：`,
   history: "🗂️ 历史开奖", th_issue: "期号", th_date: "日期", th_result: "开奖号码",
   share_title: "📣 分享", copy_link: "🔗 复制链接",
@@ -193,7 +196,10 @@ setTimeout(()=>{
 function checkNumbers(inputId, resId, data, len){
   const el = $(resId);
   const v = ($(inputId).value || "").replace(/\D/g,"");
-  if(v.length !== len){ el.innerHTML = ""; return; }
+  if(v.length !== len){
+    el.innerHTML = v.length ? `<span class="miss">${t("checker_need")(len)}</span>` : "";
+    return;
+  }
   const hits = data && data.history ? data.history.filter(h=>h.digits.join("")===v).reverse() : [];
   if(!hits.length){ el.innerHTML = `<span class="miss">${t("checker_miss")}</span>`; return; }
   el.innerHTML = `<div class="hitline">${t("checker_hit")(hits.length)}</div>` +
