@@ -75,7 +75,7 @@ en: {
     ["When are the draws?", "福彩3D draws daily at 21:15 Beijing time (19:45 Myanmar); 排列5 at 21:25 Beijing (19:55 Myanmar)."],
     ["What is 试机号?", "A test draw before the official draw to check the machine — not the official result, shown for reference only."],
     ["Can these numbers help me win?", "No. Each draw is fully independent with equal odds for every number (1/1000 per 3D combo). The frequency chart is history only."],
-    ["Where do results come from?", "Auto-fetched from 500.com every 30 minutes. Always verify against official announcements."],
+    ["Where do results come from?", "Auto-fetched from two sources every minute near draw times (19:25–21:35 Yangon). Always verify against official announcements."],
   ],
 },
 zh: {
@@ -113,7 +113,7 @@ zh: {
     ["什么时候开奖？", "福彩3D每天北京时间21:15（缅甸时间19:45）开奖；排列5每天北京时间21:25（缅甸时间19:55）开奖。"],
     ["试机号是什么？", "正式开奖前检验摇奖机的号码，不是正式开奖结果，仅供参考。"],
     ["看这些号码能中奖吗？", "不能。每次开奖完全独立随机，每个号码概率均等（3D每注1/1000）。频率图仅为历史数据。"],
-    ["数据从哪里来？", "每30分钟从500.com自动抓取。请以官方公告为准。"],
+    ["数据从哪里来？", "开奖时段（19:25–21:35）每分钟从两个来源自动抓取。请以官方公告为准。"],
   ],
 }};
 
@@ -327,7 +327,7 @@ setInterval(liveRefresh, 60000);
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) liveRefresh(); });
 
 Promise.all([
-  fetch("data/3d.json").then(r=>r.json()).catch(()=>null),
-  fetch("data/pl5.json").then(r=>r.json()).catch(()=>null),
+  fetch("data/3d.json?v="+Date.now()).then(r=>r.json()).catch(()=>null),
+  fetch("data/pl5.json?v="+Date.now()).then(r=>r.json()).catch(()=>null),
 ]).then(([a,b])=>{ D3=a; D5=b; setLang(LANG); wireCheckers(); wireCalendars(); });
 setInterval(tick, 1000); tick();
