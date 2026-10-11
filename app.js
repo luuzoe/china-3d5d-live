@@ -324,6 +324,7 @@ async function liveRefresh(){
   }catch(e){}
 }
 setInterval(liveRefresh, 60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) liveRefresh(); });
 
 Promise.all([
   fetch("data/3d.json").then(r=>r.json()).catch(()=>null),
