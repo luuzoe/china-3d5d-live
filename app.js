@@ -27,6 +27,9 @@ my: {
   disclaimer: "ဤဆိုက်သည် ရလဒ်အချက်အလက်သာ ပေးသည် — ထီထိုးဖို့ တိုက်တွန်းခြင်းမဟုတ်၊ ဂဏန်းခန့်မှန်းချက်များ မရောင်းပါ။",
   faq_title: "❓ မေးလေ့ရှိသောမေးခွန်းများ",
   pos3d: ["ရာ","ဆယ်","ခု"], pos5d: ["သောင်း","ထောင်","ရာ","ဆယ်","ခု"],
+  months: ["ဇန်နဝါရီ","ဖေဖော်ဝါရီ","မတ်","ဧပြီ","မေ","ဇွန်","ဇူလိုင်","ဩဂုတ်","စက်တင်ဘာ","အောက်တိုဘာ","နိုဝင်ဘာ","ဒီဇင်ဘာ"],
+  weekdays: ["နွေ","လာ","ဂါ","ဟူး","ကြာ","သော","နေ"],
+  monthYear: (y,m)=>`${["ဇန်နဝါရီ","ဖေဖော်ဝါရီ","မတ်","ဧပြီ","မေ","ဇွန်","ဇူလိုင်","ဩဂုတ်","စက်တင်ဘာ","အောက်တိုဘာ","နိုဝင်ဘာ","ဒီဇင်ဘာ"][m]} ${y}`,
   share_text: (a,b)=>`🇨🇳 တရုတ် 3D/5D ရလဒ်\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
     ["မဲဘယ်အချိန်ထွက်လဲ?", "福彩3D က နေ့တိုင်း Beijing စံတော်ချိန် 21:15 (မြန်မာ 19:45)၊ 排列5 က 21:25 (မြန်မာ 19:55) ထွက်ပါတယ်။"],
@@ -61,7 +64,10 @@ en: {
   updated: "Updated", source: "Source",
   disclaimer: "This site is results information only — not gambling advice, no predictions sold.",
   faq_title: "❓ FAQ",
-  pos3d: ["Hund.","Tens","Ones"], pos5d: ["10k","1k","Hund.","Tens","Ones"],
+  pos3d: ["100s","10s","1s"], pos5d: ["10k","1k","100s","10s","1s"],
+  months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+  weekdays: ["S","M","T","W","T","F","S"],
+  monthYear: (y,m)=>`${["January","February","March","April","May","June","July","August","September","October","November","December"][m]} ${y}`,
   share_text: (a,b)=>`🇨🇳 China 3D/5D results\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
     ["When are the draws?", "福彩3D draws daily at 21:15 Beijing time (19:45 Myanmar); 排列5 at 21:25 Beijing (19:55 Myanmar)."],
@@ -97,6 +103,8 @@ zh: {
   disclaimer: "本站仅提供开奖信息——不构成投注建议，不出售预测。",
   faq_title: "❓ 常见问题",
   pos3d: ["百位","十位","个位"], pos5d: ["万位","千位","百位","十位","个位"],
+  weekdays: ["日","一","二","三","四","五","六"],
+  monthYear: (y,m)=>`${y}年${m+1}月`,
   share_text: (a,b)=>`🇨🇳 中国3D/5D开奖\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
     ["什么时候开奖？", "福彩3D每天北京时间21:15（缅甸时间19:45）开奖；排列5每天北京时间21:25（缅甸时间19:55）开奖。"],
@@ -145,7 +153,11 @@ function renderLatest(){
     $("bpl3").innerHTML = ballsHTML(L.digits.slice(0,3), true);
   }
   const upd = [D3&&D3.updated, D5&&D5.updated].filter(Boolean).sort().pop();
-  if(upd) $("upd").textContent = new Date(upd).toLocaleString(LANG==="zh"?"zh-CN":LANG==="en"?"en-US":"my-MM");
+  if(upd){
+    try{
+      $("upd").textContent = new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Yangon",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(upd)).replace(",","");
+    }catch(e){ $("upd").textContent = upd; }
+  }
 }
 
 /* draw calendar */
@@ -159,10 +171,8 @@ function renderCalendar(data, gridId, labelId, off){
   const map = {}; data.history.forEach(h=>map[h.date]=h);
   const oldest = data.history[0].date.slice(0,7);
   const cur = `${y}-${String(m+1).padStart(2,"0")}`;
-  const loc = LANG==="zh"?"zh-CN":LANG==="en"?"en-US":"my-MM";
-  lb.textContent = new Date(y, m, 1).toLocaleDateString(loc, {year:"numeric", month:"long"});
-  const wd = [];
-  for(let i=0;i<7;i++) wd.push(new Date(2024,0,7+i).toLocaleDateString(loc,{weekday:"narrow"}));
+  lb.textContent = t("monthYear")(y, m);
+  const wd = t("weekdays");
   let html = `<div class="cal-head">`+wd.map(w=>`<span>${w}</span>`).join("")+`</div><div class="cal-grid">`;
   const startDay = new Date(y, m, 1).getDay();
   const daysIn = new Date(y, m+1, 0).getDate();
@@ -192,12 +202,17 @@ function wireCalendars(){
 }
 
 /* hide ad slots that never fill (AdSense not approved yet) */
-setTimeout(()=>{
+function collapseEmptyAds(){
   document.querySelectorAll(".adslot").forEach(s=>{
     const ins = s.querySelector("ins");
-    if(ins && !ins.querySelector("iframe")) s.style.display = "none";
+    if(!ins) return;
+    const unfilled = ins.getAttribute("data-ad-status") === "unfilled";
+    const empty = !ins.querySelector("iframe");
+    if(unfilled || empty) s.style.display = "none";
   });
-}, 5000);
+}
+setTimeout(collapseEmptyAds, 5000);
+setTimeout(collapseEmptyAds, 12000);
 
 function checkNumbers(inputId, resId, data, len){
   const el = $(resId);
