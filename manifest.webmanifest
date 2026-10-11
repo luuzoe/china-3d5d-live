@@ -1,1 +1,1 @@
-{"name":"တရုတ် 3D/5D Live","short_name":"China3D5D","start_url":"./","display":"standalone","background_color":"#0d1420","theme_color":"#0d1420","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
+{"background_color":"#0d1420","display":"standalone","icons":[{"sizes":"192x192","src":"icon-192.png","type":"image/png"},{"sizes":"512x512","src":"icon-512.png","type":"image/png"},{"sizes":"any","src":"icon.svg","type":"image/svg+xml"}],"name":"တရုတ် 3D/5D Live","short_name":"China3D5D","start_url":"./","theme_color":"#0d1420"}
