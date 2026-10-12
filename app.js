@@ -4,14 +4,14 @@ my: {
   doc_title: "တရုတ် 3D/5D Live | 福彩3D · 排列5 ရလဒ်တိုက်ရိုက်",
   meta_desc: "တရုတ် 福彩3D နဲ့ 排列5 ထီရလဒ် တိုက်ရိုက် — နေ့တိုင်းအပ်ဒိတ်၊ မှတ်တမ်း၊ ဂဏန်းအကြိမ်ရေ။",
   og_title: "တရုတ် 3D/5D Live — 福彩3D · 排列5 ရလဒ်တိုက်ရိုက်",
-  og_desc: "တရုတ် 福彩3D (19:45) နဲ့ 排列5 (19:55) ရလဒ်တိုက်ရိုက် — နေ့တိုင်းအပ်ဒိတ်။",
+  og_desc: "တရုတ် 福彩3D (19:45) နဲ့ 排列5 (19:00) ရလဒ်တိုက်ရိုက် — နေ့တိုင်းအပ်ဒိတ်။",
   brand: "တရုတ် 3D/5D",
   tagline: "တရုတ် 3D/5D နေ့စဉ်ထွက်ဂဏန်း တိုက်ရိုက်စစ်ဆေးနိုင်သည်",
   tab_3d: "🎯 福彩3D", tab_pl5: "🎰 排列5",
   latest: "နောက်ဆုံးရလဒ်", issue: "အမှတ်", draw_date: "မဲရက်",
   shijihao: "试机号 (စမ်းမဲ)",
   drawnote_3d: "နေ့တိုင်း 19:45 (မြန်မာစံတော်ချိန်) · 21:15 (Beijing)",
-  drawnote_pl5: "နေ့တိုင်း 19:55 (မြန်မာစံတော်ချိန်) · 21:25 (Beijing)",
+  drawnote_pl5: "နေ့တိုင်း 19:00 (မြန်မာစံတော်ချိန်) · 20:30 (Beijing)",
   next_in: "⏳ နောက်မဲအတွက်", waiting: "ရလဒ်ထွက်ဖို့ စောင့်ဆိုင်းနေသည်…",
   copy: "📋 ကူးယူမယ်", copied: "ကူးယူပြီးပြီ ✓",
   pl3_title: "🎲 排列3 (排列5 ရဲ့ ပထမ 3 လုံး)",
@@ -33,7 +33,7 @@ my: {
   monthYear: (y,m)=>`${["ဇန်နဝါရီ","ဖေဖော်ဝါရီ","မတ်","ဧပြီ","မေ","ဇွန်","ဇူလိုင်","ဩဂုတ်","စက်တင်ဘာ","အောက်တိုဘာ","နိုဝင်ဘာ","ဒီဇင်ဘာ"][m]} ${y}`,
   share_text: (a,b)=>`🇨🇳 တရုတ် 3D/5D ရလဒ်\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
-    ["မဲဘယ်အချိန်ထွက်လဲ?", "福彩3D က နေ့တိုင်း Beijing စံတော်ချိန် 21:15 (မြန်မာ 19:45)၊ 排列5 က 21:25 (မြန်မာ 19:55) ထွက်ပါတယ်။"],
+    ["မဲဘယ်အချိန်ထွက်လဲ?", "福彩3D က နေ့တိုင်း Beijing စံတော်ချိန် 21:15 (မြန်မာ 19:45)၊ 排列5 က 20:30 (မြန်မာ 19:00) ထွက်ပါတယ်။"],
     ["试机号 ဆိုတာဘာလဲ?", "မဲမထွက်ခင် စက်စမ်းတဲ့ဂဏန်းပါ — တရားဝင်ရလဒ်မဟုတ်ဘဲ ကိုးကားရန်အတွက်သာ ဖော်ပြထားတာပါ။"],
     ["ဒီဂဏန်းတွေနဲ့ ထီထိုးရင် နိုင်မှာလား?", "မသိနိုင်ပါဘူး။ မဲတစ်ခါချင်းစီက လုံးဝသီးခြားဖြစ်ပြီး ဂဏန်းတိုင်းရဲ့ အခွင့်အရေးအတူတူပါ (3D ဆို တစ်တွဲချင်း 1/1000)။ အကြိမ်ရေဇယားက သမိုင်းအချက်အလက်သက်သက်ပါ။"],
     ["ရလဒ်တွေ ဘယ်ကရလဲ?", "500.com ကို နာရီဝက်တစ်ခါ auto-fetch လုပ်ပါတယ်။ တရားဝင်ရလဒ်နဲ့ တိုက်ဆိုင်စစ်ဆေးပြီးမှ အသုံးပြုပါ။"],
@@ -43,14 +43,14 @@ en: {
   doc_title: "China 3D/5D Live | 福彩3D · 排列5 Results",
   meta_desc: "China 福彩3D and 排列5 lottery results live — updated daily, with history and digit frequency.",
   og_title: "China 3D/5D Live — 福彩3D · 排列5 Results",
-  og_desc: "China 福彩3D (19:45) and 排列5 (19:55) Myanmar-time results — updated daily.",
+  og_desc: "China 福彩3D (19:45) and 排列5 (19:00) Myanmar-time results — updated daily.",
   brand: "China 3D/5D",
   tagline: "China 3D/5D daily results \u2014 check live",
   tab_3d: "🎯 福彩3D", tab_pl5: "🎰 排列5",
   latest: "Latest result", issue: "Issue", draw_date: "Draw date",
   shijihao: "试机号 (test draw)",
   drawnote_3d: "Daily 19:45 (Myanmar time) · 21:15 (Beijing)",
-  drawnote_pl5: "Daily 19:55 (Myanmar time) · 21:25 (Beijing)",
+  drawnote_pl5: "Daily 19:00 (Myanmar time) · 20:30 (Beijing)",
   next_in: "⏳ Next draw in", waiting: "Waiting for results…",
   copy: "📋 Copy", copied: "Copied ✓",
   pl3_title: "🎲 排列3 (first 3 digits of 排列5)",
@@ -72,7 +72,7 @@ en: {
   monthYear: (y,m)=>`${["January","February","March","April","May","June","July","August","September","October","November","December"][m]} ${y}`,
   share_text: (a,b)=>`🇨🇳 China 3D/5D results\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
-    ["When are the draws?", "福彩3D draws daily at 21:15 Beijing time (19:45 Myanmar); 排列5 at 21:25 Beijing (19:55 Myanmar)."],
+    ["When are the draws?", "福彩3D draws daily at 21:15 Beijing time (19:45 Myanmar); 排列5 at 20:30 Beijing (19:00 Myanmar)."],
     ["What is 试机号?", "A test draw before the official draw to check the machine — not the official result, shown for reference only."],
     ["Can these numbers help me win?", "No. Each draw is fully independent with equal odds for every number (1/1000 per 3D combo). The frequency chart is history only."],
     ["Where do results come from?", "Auto-fetched from two sources every minute near draw times (19:25–21:35 Yangon). Always verify against official announcements."],
@@ -82,14 +82,14 @@ zh: {
   doc_title: "中国3D/5D开奖直播 | 福彩3D · 排列5",
   meta_desc: "福彩3D、排列5开奖结果直播——每日更新，含历史开奖与号码频率。",
   og_title: "中国3D/5D开奖直播——福彩3D · 排列5",
-  og_desc: "福彩3D（缅甸时间19:45）、排列5（缅甸时间19:55）开奖直播——每日更新。",
+  og_desc: "福彩3D（缅甸时间19:45）、排列5（缅甸时间19:00）开奖直播——每日更新。",
   brand: "中国3D/5D",
   tagline: "中国3D/5D每日开奖结果直播查询",
   tab_3d: "🎯 福彩3D", tab_pl5: "🎰 排列5",
   latest: "最新开奖", issue: "期号", draw_date: "开奖日期",
   shijihao: "试机号",
   drawnote_3d: "每天 19:45（缅甸时间）· 21:15（北京时间）",
-  drawnote_pl5: "每天 19:55（缅甸时间）· 21:25（北京时间）",
+  drawnote_pl5: "每天 19:00（缅甸时间）· 20:30（北京时间）",
   next_in: "⏳ 距下期开奖", waiting: "等待开奖…",
   copy: "📋 复制", copied: "已复制 ✓",
   pl3_title: "🎲 排列3（排列5前三位）",
@@ -110,7 +110,7 @@ zh: {
   monthYear: (y,m)=>`${y}年${m+1}月`,
   share_text: (a,b)=>`🇨🇳 中国3D/5D开奖\n🎯 福彩3D ${a}\n🎰 排列5 ${b}\nhttps://luuzoe.github.io/china-3d5d-live/`,
   faq: [
-    ["什么时候开奖？", "福彩3D每天北京时间21:15（缅甸时间19:45）开奖；排列5每天北京时间21:25（缅甸时间19:55）开奖。"],
+    ["什么时候开奖？", "福彩3D每天北京时间21:15（缅甸时间19:45）开奖；排列5每天北京时间20:30（缅甸时间19:00）开奖。"],
     ["试机号是什么？", "正式开奖前检验摇奖机的号码，不是正式开奖结果，仅供参考。"],
     ["看这些号码能中奖吗？", "不能。每次开奖完全独立随机，每个号码概率均等（3D每注1/1000）。频率图仅为历史数据。"],
     ["数据从哪里来？", "开奖时段（19:25–21:35）每分钟从两个来源自动抓取。请以官方公告为准。"],
@@ -275,7 +275,7 @@ function beijingNow(){
 function pad(n){ return String(n).padStart(2,"0"); }
 function tick(){
   const now = beijingNow();
-  const jobs = [["cd-3d",21,15],["cd-pl5",21,25]];
+  const jobs = [["cd-3d",21,15],["cd-pl5",20,30]];
   jobs.forEach(([id,hh,mm])=>{
     const el = $(id); if(!el) return;
     const bjDate = now.toLocaleDateString("en-CA",{timeZone:"Asia/Shanghai"});
