@@ -19,7 +19,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=7">
+<script>try{if(localStorage.getItem("cn35_theme")==="light")document.documentElement.dataset.theme="light";}catch(e){}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4388974491023298" crossorigin="anonymous"></script>
 </head>
 <body class="notranslate">
@@ -32,6 +33,10 @@
     <button data-lang="my" class="active">မြန်မာ</button>
     <button data-lang="en">EN</button>
     <button data-lang="zh">中文</button>
+    <span class="hbtns">
+      <button id="btn-notif" title="notifications">🔔</button>
+      <button id="btn-theme" title="theme">🌙</button>
+    </span>
   </div>
 </header>
 
@@ -56,6 +61,9 @@
         <button id="copy-3d" data-i18n="copy">📋 ကူးယူမယ်</button>
       </div>
     </div>
+
+    <h2 class="sec" data-i18n="freq_title">📊 ဂဏန်းအကြိမ်ရေ</h2>
+    <div class="freq" id="freq3d"></div>
 
     <h2 class="sec" data-i18n="calendar">📅 မဲပြက္ခဒိန်</h2>
     <div class="cal-nav"><button id="cal3d-prev">‹</button><span id="cal3d-label"></span><button id="cal3d-next">›</button></div>
@@ -103,6 +111,9 @@
       <div class="issue-line"><span data-i18n="issue">အမှတ်</span>: <b id="ipl3">—</b></div>
     </div>
 
+    <h2 class="sec" data-i18n="freq_title">📊 ဂဏန်းအကြိမ်ရေ</h2>
+    <div class="freq" id="freqpl5"></div>
+
     <h2 class="sec" data-i18n="calendar">📅 မဲပြက္ခဒိန်</h2>
     <div class="cal-nav"><button id="calpl5-prev">‹</button><span id="calpl5-label"></span><button id="calpl5-next">›</button></div>
     <div class="cal" id="calpl5"></div>
@@ -147,6 +158,6 @@
   </footer>
 </main>
 <div class="toast" id="toast"></div>
-<script src="app.js?v=10"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>

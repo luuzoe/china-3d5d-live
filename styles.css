@@ -2,6 +2,13 @@
   --bg:#0d1420; --bg2:#111c2e; --card:#16233a; --line:#24344f;
   --gold:#f5c542; --gold2:#ffe08a; --txt:#e8eef7; --dim:#93a3bd;
   --red:#ff5a5a; --green:#3ddc84;
+  --ink:#0d1420; --topbar:rgba(13,20,32,.96); --toastbg:#0d1420;
+}
+[data-theme="light"]{
+  --bg:#f5f2ea; --bg2:#fffdf8; --card:#ffffff; --line:#e3d9c2;
+  --gold:#c9962b; --gold2:#8a6308; --txt:#1d2530; --dim:#6d7683;
+  --red:#d63d3d; --green:#189a52;
+  --ink:#0d1420; --topbar:rgba(255,253,248,.96); --toastbg:#1d2530;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 .side-god{position:fixed; top:50%; height:min(72vh,640px); width:auto; z-index:0; pointer-events:none; opacity:.5;
@@ -15,7 +22,7 @@ body{margin:0; background:var(--bg); color:var(--txt);
   font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans Myanmar","PingFang SC","Microsoft YaHei",sans-serif;
   line-height:1.6}
 .topbar{position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between;
-  padding:10px 14px; background:rgba(13,20,32,.96); border-bottom:1px solid var(--line); backdrop-filter:blur(6px)}
+  padding:10px 14px; background:var(--topbar); border-bottom:1px solid var(--line); backdrop-filter:blur(6px)}
 .brand{font-weight:700; font-size:1.05rem}
 .brand .live-dot{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--red);
   margin:0 4px 0 8px; animation:blink 1.4s infinite}
@@ -30,7 +37,7 @@ body{margin:0; background:var(--bg); color:var(--txt);
 .langs{display:flex; gap:6px}
 .langs button{background:var(--card); color:var(--dim); border:1px solid var(--line); border-radius:8px;
   padding:5px 10px; font-size:.8rem; cursor:pointer}
-.langs button.active{color:#0d1420; background:var(--gold); border-color:var(--gold); font-weight:700}
+.langs button.active{color:var(--ink); background:var(--gold); border-color:var(--gold); font-weight:700}
 main{max-width:720px; margin:0 auto; padding:12px 12px 40px}
 .tabs{display:flex; gap:8px; margin:6px 0 14px}
 .tabs button{flex:1; padding:11px; font-size:1rem; border-radius:12px; border:1px solid var(--line);
@@ -103,8 +110,27 @@ footer{margin-top:26px; padding:16px 6px; border-top:1px solid var(--line); colo
 footer a{color:var(--gold)}
 .meta{color:var(--dim); font-size:.78rem; text-align:center; margin:10px 0}
 .adslot{margin:14px 0; min-height:60px}
-.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:#0d1420;
+.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:var(--toastbg);
   border:1px solid var(--gold); color:var(--gold2); padding:10px 18px; border-radius:24px;
   font-size:.85rem; opacity:0; pointer-events:none; transition:opacity .3s; z-index:99}
 .toast.show{opacity:1}
 @media(min-width:700px){ .ball{width:66px;height:66px;font-size:2rem} .pos-labels span{width:66px} }
+
+.hbtns{display:flex; gap:6px; margin-left:6px}
+.hbtns button{background:var(--card); color:var(--dim); border:1px solid var(--line); border-radius:8px;
+  padding:5px 9px; font-size:.85rem; cursor:pointer; line-height:1}
+.hbtns button.on{color:var(--ink); background:var(--gold); border-color:var(--gold)}
+
+.freq{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:14px}
+.freq-pos{margin-bottom:12px}
+.freq-pos:last-child{margin-bottom:0}
+.freq-pos h4{margin:0 0 6px; font-size:.8rem; color:var(--dim); font-weight:600}
+.freq-row{display:flex; align-items:flex-end; gap:3px; height:88px}
+.freq-bar{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; min-width:0}
+.freq-bar i{display:block; width:100%; max-width:22px; border-radius:3px 3px 0 0;
+  background:linear-gradient(to top,var(--gold),var(--gold2)); font-style:normal}
+.freq-bar.hot i{background:linear-gradient(to top,#ff5a5a,#ff9a5a)}
+.freq-bar.cold i{opacity:.45}
+.freq-bar b{font-size:.62rem; color:var(--dim); margin-top:2px; font-weight:600}
+.freq-bar span{font-size:.6rem; color:var(--dim); font-variant-numeric:tabular-nums}
+.freq-note{font-size:.75rem; color:var(--dim); margin-top:8px; line-height:1.5}

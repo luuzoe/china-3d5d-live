@@ -21,6 +21,11 @@ my: {
   checker_miss: "မှတ်တမ်း 100 မဲထဲမှာ မတွေ့ပါ",
   checker_need: n => `ဂဏန်း ${n} လုံး အပြည့်ရိုက်ထည့်ပါ`,
   new_result: "🎉 ရလဒ်အသစ်ရပြီ!",
+  freq_title: "📊 ဂဏန်းအကြိမ်ရေ",
+  freq_note: "နောက် 100 မဲရဲ့ ဂဏန်းအကြိမ်ရေပါ။ မဲတစ်ခါချင်းစီက လုံးဝသီးခြားဖြစ်တာမို့ ဒီဇယားက နောင်မဲကို ခန့်မှန်းပေးနိုင်မှာ မဟုတ်ပါ။",
+  notif_on: "🔔 ရလဒ်အသစ်ရရင် အကြောင်းကြားမယ်", notif_off: "🔔 အကြောင်းကြားတာ ပိတ်လိုက်ပြီ",
+  notif_denied: "browser setting မှာ notification ခွင့်ပြုပေးပါ",
+  notif_new3d: "🎯 福彩3D ရလဒ်အသစ်", notif_newpl5: "🎰 排列5 ရလဒ်အသစ်",
   checker_hit: n => `${n} ခါတွေ့တယ်:`,
   history: "🗂️ မှတ်တမ်း", th_issue: "အမှတ်", th_date: "ရက်", th_result: "ရလဒ်",
   share_title: "📣 မျှဝေမယ်", copy_link: "🔗 လင့်ခ်ကူးမယ်",
@@ -60,6 +65,11 @@ en: {
   checker_miss: "Not found in the last 100 draws",
   checker_need: n => `Please enter all ${n} digits`,
   new_result: "🎉 New results are in!",
+  freq_title: "📊 Digit frequency",
+  freq_note: "Digit counts from the last 100 draws. Each draw is fully independent, so this history cannot predict future results.",
+  notif_on: "🔔 Notifications on — I'll alert you when new results land", notif_off: "🔔 Notifications off",
+  notif_denied: "Please allow notifications in your browser settings",
+  notif_new3d: "🎯 福彩3D new result", notif_newpl5: "🎰 排列5 new result",
   checker_hit: n => `Found ${n} time(s):`,
   history: "🗂️ History", th_issue: "Issue", th_date: "Date", th_result: "Result",
   share_title: "📣 Share", copy_link: "🔗 Copy link",
@@ -75,7 +85,7 @@ en: {
     ["When are the draws?", "福彩3D draws daily at 21:15 Beijing time (19:45 Myanmar); 排列5 at 20:30 Beijing (19:00 Myanmar)."],
     ["What is 试机号?", "A test draw before the official draw to check the machine — not the official result, shown for reference only."],
     ["Can these numbers help me win?", "No. Each draw is fully independent with equal odds for every number (1/1000 per 3D combo). The frequency chart is history only."],
-    ["Where do results come from?", "Auto-fetched from two sources every minute near draw times (19:25–21:35 Yangon). Always verify against official announcements."],
+    ["Where do results come from?", "Auto-fetched from two sources every minute near draw times (18:25–21:35 Yangon). Always verify against official announcements."],
   ],
 },
 zh: {
@@ -99,6 +109,11 @@ zh: {
   checker_miss: "近100期历史中未找到",
   checker_need: n => `请输入完整的 ${n} 位数字`,
   new_result: "🎉 新开奖结果来了！",
+  freq_title: "📊 号码频率",
+  freq_note: "近100期各位置数字出现次数。每次开奖完全独立随机，历史数据不能预测未来开奖。",
+  notif_on: "🔔 已开启通知——有新开奖结果会提醒您", notif_off: "🔔 通知已关闭",
+  notif_denied: "请在浏览器设置中允许通知",
+  notif_new3d: "🎯 福彩3D新开奖", notif_newpl5: "🎰 排列5新开奖",
   checker_hit: n => `共出现 ${n} 次：`,
   history: "🗂️ 历史开奖", th_issue: "期号", th_date: "日期", th_result: "开奖号码",
   share_title: "📣 分享", copy_link: "🔗 复制链接",
@@ -113,7 +128,7 @@ zh: {
     ["什么时候开奖？", "福彩3D每天北京时间21:15（缅甸时间19:45）开奖；排列5每天北京时间20:30（缅甸时间19:00）开奖。"],
     ["试机号是什么？", "正式开奖前检验摇奖机的号码，不是正式开奖结果，仅供参考。"],
     ["看这些号码能中奖吗？", "不能。每次开奖完全独立随机，每个号码概率均等（3D每注1/1000）。频率图仅为历史数据。"],
-    ["数据从哪里来？", "开奖时段（19:25–21:35）每分钟从两个来源自动抓取。请以官方公告为准。"],
+    ["数据从哪里来？", "开奖时段（18:25–21:35）每分钟从两个来源自动抓取。请以官方公告为准。"],
   ],
 }};
 
@@ -286,10 +301,30 @@ function tick(){
   });
 }
 
+
+/* digit frequency: per-position 0-9 counts over history */
+function renderFreq(data, elId, posLabels){
+  const el = $(elId); if(!el || !data || !data.history || !data.history.length) return;
+  const np = posLabels.length;
+  let html = "";
+  for(let p=0;p<np;p++){
+    const counts = new Array(10).fill(0);
+    data.history.forEach(h=>{ const d=h.digits[p]; if(d>=0&&d<=9) counts[d]++; });
+    const max = Math.max.apply(null,counts), min = Math.min.apply(null,counts);
+    const bars = counts.map((c,d)=>{
+      const hgt = max ? Math.round(c/max*54) : 0;
+      const cls = (max>min) ? (c===max ? " hot" : (c===min ? " cold" : "")) : "";
+      return `<div class="freq-bar${cls}"><span>${c}</span><i style="height:${hgt}px"></i><b>${d}</b></div>`;
+    }).join("");
+    html += `<div class="freq-pos"><h4>${posLabels[p]}</h4><div class="freq-row">${bars}</div></div>`;
+  }
+  el.innerHTML = html + `<div class="freq-note">${t("freq_note")}</div>`;
+}
+
 function setLang(l){
   LANG = l; localStorage.setItem("cn35_lang", l);
   document.documentElement.lang = l==="zh"?"zh-CN":l;
-  document.querySelectorAll("#langs button").forEach(b=>b.classList.toggle("active", b.dataset.lang===l));
+  document.querySelectorAll("#langs button[data-lang]").forEach(b=>b.classList.toggle("active", b.dataset.lang===l));
   document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=t(el.dataset.i18n); if(typeof v==="string") el.textContent=v; });
   document.querySelectorAll("[data-i18n-attr]").forEach(el=>{
     const map={meta_desc:"content",og_title:"content",og_desc:"content"}; const attr=map[el.dataset.i18nAttr];
@@ -299,15 +334,47 @@ function setLang(l){
     const v=t(el.dataset.i18nPh); if(typeof v==="string") el.setAttribute("placeholder",v);
   });
   document.title = t("doc_title");
-  renderLatest(); renderHist(); renderFaq(); shareLinks();
+  renderLatest(); renderHist(); renderFaq(); shareLinks(); renderFreq(D3,"freq3d",t("pos3d")); renderFreq(D5,"freqpl5",t("pos5d"));
   if(window._calUpd) window._calUpd();
   if($("ck3d") && $("ck3d").value.replace(/\D/g,"").length===3) checkNumbers("ck3d","ck3d-res",D3,3);
   if($("ckpl5") && $("ckpl5").value.replace(/\D/g,"").length===5) checkNumbers("ckpl5","ckpl5-res",D5,5);
 }
 
-document.querySelectorAll("#langs button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+document.querySelectorAll("#langs button[data-lang]").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 $("tab-3d").onclick = ()=>{ $("tab-3d").classList.add("active"); $("tab-pl5").classList.remove("active"); $("pane-3d").classList.add("active"); $("pane-pl5").classList.remove("active"); };
 $("tab-pl5").onclick = ()=>{ $("tab-pl5").classList.add("active"); $("tab-3d").classList.remove("active"); $("pane-pl5").classList.add("active"); $("pane-3d").classList.remove("active"); };
+
+
+/* theme: dark default, toggle persisted */
+function applyTheme(th){
+  document.documentElement.dataset.theme = th;
+  localStorage.setItem("cn35_theme", th);
+  $("btn-theme").textContent = th==="light" ? "☀️" : "🌙";
+}
+applyTheme(localStorage.getItem("cn35_theme") || "dark");
+$("btn-theme").onclick = ()=> applyTheme(document.documentElement.dataset.theme==="light" ? "dark" : "light");
+
+/* notifications: bell toggle; alerts when a NEW result lands while tab is hidden */
+let notifWanted = localStorage.getItem("cn35_notif")==="1";
+function paintNotifBtn(){ $("btn-notif").classList.toggle("on", notifWanted && ("Notification" in window) && Notification.permission==="granted"); }
+async function toggleNotif(){
+  if(!("Notification" in window)){ toast(t("notif_denied")); return; }
+  if(Notification.permission==="denied"){ toast(t("notif_denied")); return; }
+  if(Notification.permission==="default"){
+    try{ if(await Notification.requestPermission()!=="granted"){ toast(t("notif_denied")); return; } }
+    catch(e){ toast(t("notif_denied")); return; }
+  }
+  notifWanted = !notifWanted;
+  localStorage.setItem("cn35_notif", notifWanted?"1":"0");
+  paintNotifBtn();
+  toast(t(notifWanted?"notif_on":"notif_off"));
+}
+$("btn-notif").onclick = toggleNotif;
+paintNotifBtn();
+function notifyNew(kind, issue, digits){
+  if(!notifWanted || !("Notification" in window) || Notification.permission!=="granted" || !document.hidden) return;
+  try{ new Notification(t(kind==="3d"?"notif_new3d":"notif_newpl5"), { body: issue+": "+digits.join(" "), icon: "icon-192.png", tag: "cn35-"+kind }); }catch(e){}
+}
 
 /* live refresh: re-fetch data every 60s, update page the moment new results land */
 async function liveRefresh(){
@@ -317,10 +384,14 @@ async function liveRefresh(){
       fetch("data/3d.json?"+q).then(r=>r.ok?r.json():null).catch(()=>null),
       fetch("data/pl5.json?"+q).then(r=>r.ok?r.json():null).catch(()=>null),
     ]);
-    let changed = false;
-    if(a && a.latest && D3 && D3.latest && a.latest.issue !== D3.latest.issue){ D3 = a; changed = true; }
-    if(b && b.latest && D5 && D5.latest && b.latest.issue !== D5.latest.issue){ D5 = b; changed = true; }
-    if(changed){ setLang(LANG); toast(t("new_result")); }
+    let changed = false, ch3 = false, ch5 = false;
+    if(a && a.latest && D3 && D3.latest && a.latest.issue !== D3.latest.issue){ D3 = a; changed = true; ch3 = true; }
+    if(b && b.latest && D5 && D5.latest && b.latest.issue !== D5.latest.issue){ D5 = b; changed = true; ch5 = true; }
+    if(changed){
+      setLang(LANG); toast(t("new_result"));
+      if(ch3) notifyNew("3d", D3.latest.issue, D3.latest.digits);
+      if(ch5) notifyNew("pl5", D5.latest.issue, D5.latest.digits);
+    }
   }catch(e){}
 }
 setInterval(liveRefresh, 60000);
