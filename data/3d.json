@@ -1,25 +1,14 @@
 {
- "updated": "2026-10-11T15:04:49.782371+00:00",
+ "updated": "2026-10-12T13:32:00.031078+00:00",
  "source": "datachart.500.com",
  "draw_time_beijing": "21:15",
  "latest": {
-  "issue": "2026270",
-  "date": "2026-10-11",
+  "issue": "2026271",
+  "date": "2026-10-12",
   "digits": [
-   0,
+   2,
    8,
-   4
-  ],
-  "extra": {
-   "shijihao": [
-    0,
-    5,
-    2
-   ]
-  },
-  "verified_by": [
-   "baidu-official-widget",
-   "m.china-lottery.cn"
+   0
   ]
  },
  "history": [
@@ -1641,6 +1630,15 @@
    "verified_by": [
     "baidu-official-widget",
     "m.china-lottery.cn"
+   ]
+  },
+  {
+   "issue": "2026271",
+   "date": "2026-10-12",
+   "digits": [
+    2,
+    8,
+    0
    ]
   }
  ]
